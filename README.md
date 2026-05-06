@@ -1,7 +1,8 @@
 # GitHubUserActivityCLI
 
 A simple .NET CLI tool to fetch and analyze a GitHub user's recent public activity/events.
-You can access the repository here: https://github.com/jakubszubka/Github-User-Activity
+The project was built as an exercise based on this:
+https://roadmap.sh/projects/github-user-activity
 
 ## Features
 
