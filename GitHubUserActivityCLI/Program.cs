@@ -9,28 +9,30 @@ if (args.Length != 1)
 } else
 {
     var username = args[0];
+
+    // Greeting the user
     Console.WriteLine($"Hello, {username}!");
 
+    // Fetching the user's GitHub activity
     using var httpClient = new HttpClient();
     httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("GitHubActivityCli/1.0");
 
+    // GitHub API endpoint for user events
     var githubUserUri = $"https://api.github.com/users/{username}/events";
     var response = await httpClient.GetAsync(githubUserUri);
     var responseJson = await response.Content.ReadAsStringAsync();
 
+    // Saving the response to a file in the solution directory
     var projectDirectory = AppContext.BaseDirectory;          // bin/Debug/...
     var solutionDirectory = Path.Combine(projectDirectory, "..", "..", "..");
-
     await File.WriteAllTextAsync($"{solutionDirectory}/{username}_events.json", responseJson);
 
+    // Processing the response and generating a list of GitHubEvent objects
     var events = GenerateListOfEvents(responseJson);
 
+    // Displaying the events and some statistics
     Console.WriteLine($"The amount of items in events: {events.Count}");
-    
-    //DisplayEvents(events, 5);
-
     Console.WriteLine($"Event types found: {string.Join(", ", FindTypes(events))}");
-
 }
 
 List<GitHubEvent> GenerateListOfEvents(string responseJson)
@@ -75,7 +77,7 @@ void DisplayEvents(List<GitHubEvent> events, int amount)
     foreach (var evt in events)
     {
         Console.WriteLine(FormatActivity(evt));
-        if (iterator++ > amount) break; // limit to first 5 events
+        if (iterator++ > amount) break; // limit to first amount of events
     }
 }
 
